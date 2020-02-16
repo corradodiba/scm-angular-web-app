@@ -1,9 +1,10 @@
 export default interface User {
-  _id: string;
+  id: string;
   fiscalCode: string;
   email?: string;
   name: string;
   surname: string;
   dateOfBirth: Date;
   type: string;
+  status?: boolean;
 }

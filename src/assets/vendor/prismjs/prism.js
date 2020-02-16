@@ -42,10 +42,10 @@ var _ = {
 		},
 
 		objId: function (obj) {
-			if (!obj['__id']) {
-				Object.defineProperty(obj, '__id', { value: ++uniqueId });
+			if (!obj['_id']) {
+				Object.defineProperty(obj, '_id', { value: ++uniqueId });
 			}
-			return obj['__id'];
+			return obj['_id'];
 		},
 
 		// Deep clone a language definition (e.g. to extend it)

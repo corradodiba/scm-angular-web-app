@@ -10,6 +10,7 @@ import User from "../../interfaces/user.model";
 import { environment } from "../../../environments/environment";
 
 import { LoginData, SignupData } from "../../interfaces/auth.model";
+import { Socket } from "ngx-socket-io";
 
 const URL = `${environment.apiUrl}/auth/`;
 @Injectable({
@@ -24,7 +25,11 @@ export class AuthService {
   private userId: string;
   private typeUser: IUserType;
 
-  constructor(public http: HttpClient, private router: Router) {}
+  constructor(
+    private socket: Socket,
+    public http: HttpClient,
+    private router: Router
+  ) {}
 
   getToken() {
     return this.token;
@@ -63,29 +68,33 @@ export class AuthService {
         email,
         password
       })
-      .subscribe(test => {
+      .subscribe((test) => {
         this.loginUser({ email, password });
       });
   }
 
   loginUser(authData: LoginData) {
-    this.http.post<ITokenData>(URL + "login", authData).subscribe(response => {
-      const { token, id, type, expiresIn } = response;
+    this.http
+      .post<ITokenData>(URL + "login", authData)
+      .subscribe((response) => {
+        const { token, id, type, expiresIn } = response;
 
-      this.token = token;
-      this.authStatusListener.next(true);
-      if (token) {
-        this.getTokenTimeout(expiresIn);
-        this.isAuthenticated = true;
-        this.userId = id;
-        this.typeUser = type;
+        this.token = token;
         this.authStatusListener.next(true);
-        const timeStamp = new Date();
-        const expirationDate = new Date(timeStamp.getTime() + expiresIn * 1000);
-        this.storeAuthData(token, expirationDate, this.userId, type);
-        this.router.navigate([``]);
-      }
-    });
+        if (token) {
+          this.getTokenTimeout(expiresIn);
+          this.isAuthenticated = true;
+          this.userId = id;
+          this.typeUser = type;
+          this.authStatusListener.next(true);
+          const timeStamp = new Date();
+          const expirationDate = new Date(
+            timeStamp.getTime() + expiresIn * 1000
+          );
+          this.storeAuthData(token, expirationDate, this.userId, type);
+          this.router.navigate([``]);
+        }
+      });
   }
 
   getTokenTimeout(expiresIn: number) {
@@ -146,6 +155,9 @@ export class AuthService {
   }
 
   logoutUser() {
+    this.socket.connect();
+    this.socket.emit("auth", this.userId);
+    console.log(localStorage.getItem("id"));
     this.token = "";
     this.isAuthenticated = false;
     this.userId = null;

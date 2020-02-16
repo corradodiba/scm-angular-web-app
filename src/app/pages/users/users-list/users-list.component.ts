@@ -35,7 +35,7 @@ export class UsersListComponent implements OnInit {
   mapUserListDetails() {
     const usersMapped: IList[] = this.users.map(user => {
       return {
-        _id: user._id,
+        id: user.id,
         title: `${user.name} ${user.surname}`,
         description: user.fiscalCode,
         buttons: [
@@ -56,16 +56,16 @@ export class UsersListComponent implements OnInit {
   async onActionToUser(action: ActionButton) {
     console.log(action);
     if (this.isNavigable) {
-      this.router.navigate([`/${this.usersPath}/${action._id}`]);
+      this.router.navigate([`/${this.usersPath}/${action.id}`]);
     } else if (action.text === "Show") {
       this.showUserById.emit(action);
     } else if (action.text === "Delete") {
       this.users.map((user, index) => {
-        if (user._id === action._id) {
+        if (user.id === action.id) {
           this.users.splice(index, 1);
         }
       });
-      await this.usersService.deleteUserById(action._id);
+      await this.usersService.deleteUserById(action.id);
     }
   }
 }

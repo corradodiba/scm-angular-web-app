@@ -11,6 +11,7 @@ import { UsersService } from "src/app/pages/users/users.service";
 import { AuthService } from "src/app/pages/auth/auth.service";
 import { SubjectsService } from "src/app/pages/subjects/subjects.service";
 import { ISimpleList } from "src/app/interfaces/new/simple-list.model";
+import { Socket } from "ngx-socket-io";
 
 @Component({
   selector: "app-admin-dashboards",
@@ -29,8 +30,8 @@ export class AdminDashboardsComponent implements OnInit, OnDestroy {
   subjectsSimpleList: ISimpleList;
 
   courses: Course[];
-  students: User[];
-  teachers: User[];
+  students: User[] = [];
+  teachers: User[] = [];
   subjects: Subject[];
 
   selectedCourse: Course;
@@ -40,6 +41,7 @@ export class AdminDashboardsComponent implements OnInit, OnDestroy {
   loggedUser: User;
 
   constructor(
+    private socket: Socket,
     private coursesService: CoursesService,
     private usersService: UsersService,
     private authService: AuthService,
@@ -47,10 +49,12 @@ export class AdminDashboardsComponent implements OnInit, OnDestroy {
   ) {}
 
   async ngOnInit() {
+    this.socket.connect();
+
     this.isAuthenticated = this.authService.isAuth();
     this.authListenerSubs = this.authService
       .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
+      .subscribe((isAuthenticated) => {
         this.isAuthenticated = isAuthenticated;
       });
     if (this.isAuthenticated) {
@@ -64,7 +68,26 @@ export class AdminDashboardsComponent implements OnInit, OnDestroy {
       this.students = students;
       this.teachers = teachers;
       this.subjects = subjects;
+
       this.selectedCourse = this.courses[0];
+
+      this.socket
+        .fromEvent("auth")
+        .subscribe((data: { status: boolean; id: string }) => {
+          const { status, id } = data;
+          const student = this.selectedCourse.students.find(
+            (user) => id === user.id
+          );
+          const teacher = this.selectedCourse.teachers.find(
+            (user) => id === user.id
+          );
+          if (student) {
+            student.status = status;
+          }
+          if (teacher) {
+            teacher.status = status;
+          }
+        });
       this.coursesCard = this.getCoursesAssets(this.courses.length);
       this.studentsCard = this.getStudentAssets(this.students.length);
       this.teachersCard = this.getTeacherAssets(this.teachers.length);
@@ -144,7 +167,7 @@ export class AdminDashboardsComponent implements OnInit, OnDestroy {
     return {
       title: "Subjects",
       subtitle: `${course.subjects.length} subjects into course ${course.name}`,
-      items: course.subjects.map(subject => {
+      items: course.subjects.map((subject) => {
         return { avatar: `${subject.name.charAt(0)}`, text: subject.name };
       }),
       cover: "bg-success"

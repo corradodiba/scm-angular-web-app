@@ -29,7 +29,7 @@ export class AdminModalsComponent implements OnInit {
           this.course[key] = form.value[key];
         }
       }
-      this.course = await this.coursesService.editCourse(this.course._id, {
+      this.course = await this.coursesService.editCourse(this.course.id, {
         name: this.course.name,
         year: this.course.year,
         status: this.course.status
@@ -46,7 +46,7 @@ export class AdminModalsComponent implements OnInit {
   }
 
   async onDeleteCourse() {
-    await this.coursesService.deleteCourseById(this.course._id);
+    await this.coursesService.deleteCourseById(this.course.id);
     if (this.courses) {
       this.courses.find((course, index) => {
         if (course === this.course) {

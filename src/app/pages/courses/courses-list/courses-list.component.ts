@@ -37,7 +37,7 @@ export class CoursesListComponent implements OnInit {
   mapCoursesListDetails() {
     const coursesMapped: IList[] = this.courses.map(course => {
       return {
-        _id: course._id,
+        id: course.id,
         title: `Corso ${course.year}`,
         description: "Catania",
         buttons: [
@@ -59,16 +59,16 @@ export class CoursesListComponent implements OnInit {
     console.log(action);
     this.isHidden = false;
     if (this.isNavigable) {
-      this.router.navigate([`${this.apiUrl}/${action._id}`]);
+      this.router.navigate([`${this.apiUrl}/${action.id}`]);
     } else if (action.text === "Show") {
       this.showCourseById.emit(action);
     } else if (action.text === "Delete") {
       this.courses.map((course, index) => {
-        if (course._id === action._id) {
+        if (course.id === action.id) {
           this.courses.splice(index, 1);
         }
       });
-      await this.coursesService.deleteCourseById(action._id);
+      await this.coursesService.deleteCourseById(action.id);
     }
   }
 }

@@ -1,4 +1,4 @@
 export interface ActionButton {
-  _id: string;
+  id: string;
   text: string;
 }

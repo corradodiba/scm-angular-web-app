@@ -45,7 +45,7 @@ export class AdminMyProfileComponent implements OnInit, OnDestroy {
   async onEditUser(form: NgForm) {
     const { userName, surname } = form.value;
     const updatedUser: User = await this.usersService.editUserById(
-      this.userAuth._id,
+      this.userAuth.id,
       { name: userName, surname }
     );
     this.userAuth = updatedUser;

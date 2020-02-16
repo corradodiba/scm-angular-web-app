@@ -17,7 +17,7 @@ export class DeleteModalComponent implements OnInit {
   ngOnInit() {}
 
   async onDeleteCourse() {
-    await this.coursesService.deleteCourseById(this.course._id);
+    await this.coursesService.deleteCourseById(this.course.id);
     if (this.courses) {
       this.courses.find((course, index) => {
         if (course === this.course) {

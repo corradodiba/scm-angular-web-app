@@ -30,7 +30,7 @@ export class AddEditModalComponent implements OnInit {
           this.course[key] = form.value[key];
         }
       }
-      this.course = await this.coursesService.editCourse(this.course._id, {
+      this.course = await this.coursesService.editCourse(this.course.id, {
         name: this.course.name,
         year: this.course.year,
         status: this.course.status
