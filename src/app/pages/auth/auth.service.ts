@@ -7,7 +7,7 @@ import { ITokenData } from "../../interfaces/tokenData.model";
 import { IUserType } from "../../interfaces/userType.model";
 import User from "../../interfaces/user.model";
 
-import { environment } from "../../../environments/environment";
+import { environment } from "../../../environments/environment.prod";
 
 import { LoginData, SignupData } from "../../interfaces/auth.model";
 import { Socket } from "ngx-socket-io";

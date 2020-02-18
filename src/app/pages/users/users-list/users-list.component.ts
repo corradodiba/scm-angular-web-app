@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Router } from "@angular/router";
 
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 
 import { UsersService } from "../users.service";
 
@@ -33,7 +33,7 @@ export class UsersListComponent implements OnInit {
   }
 
   mapUserListDetails() {
-    const usersMapped: IList[] = this.users.map(user => {
+    const usersMapped: IList[] = this.users.map((user) => {
       return {
         id: user.id,
         title: `${user.name} ${user.surname}`,

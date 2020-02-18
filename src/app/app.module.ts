@@ -11,7 +11,7 @@ import { AuthModule } from "./pages/auth/auth.module";
 import { HomepageModule } from "./pages/homepage/homepage.module";
 import { MyProfileModule } from "./pages/my-profile/my-profile.module";
 
-import { environment } from "../environments/environment";
+import { environment } from "../environments/environment.prod";
 
 import { SocketIoModule, SocketIoConfig } from "ngx-socket-io";
 const config: SocketIoConfig = { url: environment.apiUrl, options: {} };

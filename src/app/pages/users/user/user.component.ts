@@ -3,7 +3,7 @@ import { ParamMap, ActivatedRoute, Router } from "@angular/router";
 
 import { UsersService } from "../users.service";
 
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 
 import User from "../../../interfaces/user.model";
 import { CoursesService } from "../../courses/courses.service";

@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 
 import { CoursesService } from "../courses.service";
 
-import { environment } from "src/environments/environment";
+import { environment } from "src/environments/environment.prod";
 
 import { IListCardModel } from "src/app/interfaces/list-card.model";
 import Course from "../../../interfaces/course.model";
@@ -35,7 +35,7 @@ export class CoursesListComponent implements OnInit {
   }
 
   mapCoursesListDetails() {
-    const coursesMapped: IList[] = this.courses.map(course => {
+    const coursesMapped: IList[] = this.courses.map((course) => {
       return {
         id: course.id,
         title: `Corso ${course.year}`,
